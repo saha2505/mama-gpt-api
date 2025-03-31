@@ -9,7 +9,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { messages } = req.body;
+    const body = req.body;
+
+    if (!body || !body.messages) {
+      return res.status(400).json({ error: "Bad request: 'messages' is missing in body." });
+    }
+
+    const { messages } = body;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
